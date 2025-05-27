@@ -2,12 +2,12 @@
 const productos = [
     {
         nombre: "Desmalezadora",
-        precio: "458",
+        precio: "999",
         imagen: "https://placehold.co/400x300/E0F2F7/2C3E50?text=Imagen+Desmalezadora"
     },
     {
         nombre: "Disco de Corte",
-        precio: "11",
+        precio: "777",
         imagen: "https://http2.mlstatic.com/D_Q_NP_2X_734813-MLV81164593273_122024-E.webp"
     },
     {
