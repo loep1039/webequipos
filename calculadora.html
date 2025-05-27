@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Letras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font import for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Apply Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="calculator bg-blue-200 p-5 rounded-xl shadow-lg grid gap-2 grid-cols-3 max-w-xs w-full">
+        <div class="display col-span-3 bg-blue-50 border border-blue-300 p-3 text-3xl text-right rounded-lg min-h-[70px] flex flex-col justify-between">
+            <div id="letterDisplay" class="text-gray-800 font-semibold break-all"></div>
+            <div class="number-label text-3xl text-gray-600 mt-1" id="resultDisplay"></div>
+        </div>
+
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="B">B<small class="text-xs absolute bottom-1 text-gray-600">1</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="U">U<small class="text-xs absolute bottom-1 text-gray-600">2</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="I">I<small class="text-xs absolute bottom-1 text-gray-600">3</small></button>
+
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="T">T<small class="text-xs absolute bottom-1 text-gray-600">4</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="R">R<small class="text-xs absolute bottom-1 text-gray-600">5</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="A">A<small class="text-xs absolute bottom-1 text-gray-600">6</small></button>
+
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="G">G<small class="text-xs absolute bottom-1 text-gray-600">7</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="O">O<small class="text-xs absolute bottom-1 text-gray-600">8</small></button>
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="S">S<small class="text-xs absolute bottom-1 text-gray-600">9</small></button>
+
+        <button class="button w-full h-16 bg-blue-100 border border-blue-300 rounded-xl text-3xl cursor-pointer flex flex-col justify-center items-center relative transition duration-200 ease-in-out hover:bg-blue-200 active:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" data-value="E">E<small class="text-xs absolute bottom-1 text-gray-600">0</small></button>
+        <button class="button clear col-span-2 w-auto h-16 bg-red-200 text-red-600 text-xl rounded-xl cursor-pointer flex justify-center items-center transition duration-200 ease-in-out hover:bg-red-300 active:bg-red-400 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75" data-value="CLEAR">BORRAR</button>
+    </div>
+
+    <script>
+        // Get references to the display elements
+        const resultDisplay = document.getElementById('resultDisplay');
+        const letterDisplay = document.getElementById('letterDisplay');
+        // Initialize current input string
+        let currentInput = "";
+
+        // Define the mapping from letters to numbers
+        const letterMap = {
+            'B': '1', 'U': '2', 'I': '3',
+            'T': '4', 'R': '5', 'A': '6',
+            'G': '7', 'O': '8', 'S': '9',
+            'E': '0'
+        };
+
+        // Add event listeners to all buttons
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Get the data-value attribute of the clicked button
+                const value = button.dataset.value;
+
+                // Handle CLEAR button
+                if (value === "CLEAR") {
+                    currentInput = ""; // Clear the input
+                } else {
+                    // Append the corresponding number to the current input
+                    currentInput += letterMap[value];
+                }
+
+                // Update the letter display by converting numbers back to letters
+                letterDisplay.textContent = currentInput.split('').map(n => {
+                    // Find the letter that maps to the current number
+                    const letter = Object.keys(letterMap).find(key => letterMap[key] === n);
+                    return letter ? letter : ''; // Return the letter or an empty string if not found
+                }).join(''); // Join the array of letters into a single string
+
+                // Update the number display
+                resultDisplay.textContent = currentInput;
+            });
+        });
+    </script>
+</body>
+</html>
